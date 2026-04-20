@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up - ResumeGo</title>
+
+<!-- Font Awesome for eye icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+body{
+margin:0;
+font-family:"Poppins",sans-serif;
+background:linear-gradient(135deg,#00b8a9,#f8b500);
+height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+nav{
+background:#222831;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 50px;
+color:white;
+}
+
+nav ul{
+list-style:none;
+display:flex;
+gap:25px;
+}
+
+nav ul li a{
+color:white;
+text-decoration:none;
+}
+
+.signup-container{
+background:white;
+width:700px;
+margin:auto;
+margin-top:50px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+padding:40px;
+text-align:center;
+}
+
+.input-group{
+position:relative;
+margin-bottom:18px;
+}
+
+.input-group input{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:14px;
+}
+
+/* 🔥 FIX: Hide default browser eye icon */
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button {
+    visibility: hidden;
+    display: none !important;
+}
+
+.input-group label{
+position:absolute;
+left:12px;
+top:12px;
+background:white;
+padding:0 4px;
+color:#777;
+font-size:14px;
+transition:0.2s;
+pointer-events:none;
+}
+
+.input-group input:focus + label,
+.input-group input:valid + label{
+top:-8px;
+font-size:11px;
+color:#00b8a9;
+}
+
+.password-box{
+position:relative;
+}
+
+.toggle{
+position:absolute;
+right:10px;
+top:12px;
+cursor:pointer;
+font-size:16px;
+color:#555;
+}
+
+.toggle:hover{
+color:#000;
+}
+
+.password-hint{
+font-size:12px;
+color:#555;
+text-align:left;
+margin-bottom:8px;
+}
+
+.strength-bar{
+width:100%;
+height:6px;
+background:#ddd;
+border-radius:5px;
+margin-bottom:6px;
+overflow:hidden;
+}
+
+#strength-fill{
+height:6px;
+width:0%;
+background:red;
+transition:0.3s;
+}
+
+#strength-text{
+font-size:12px;
+font-weight:600;
+text-align:left;
+margin-bottom:10px;
+}
+
+.signup-container button{
+width:100%;
+background:#f85f73;
+border:none;
+color:white;
+padding:12px;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.signup-container button:hover{
+background:#ff4757;
+transform:scale(1.03);
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+#errorMsg{
+color:red;
+font-size:13px;
+margin-top:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+<h1>ResumeGo</h1>
+<ul>
+<li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+<li><a href="{{ url_for('login') }}">Login</a></li>
+<li><a href="{{ url_for('info') }}">Home</a></li>
+</ul>
+</nav>
+
+<div class="signup-container">
+
+<h2>Initialize Your ResumeGo Toolkit</h2>
+
+<form action="{{ url_for('signup') }}" method="POST">
+
+<div class="input-group">
+<input type="email" name="email" required>
+<label>Email Address</label>
+</div>
+
+<div class="input-group">
+<input type="tel" name="ContactNumber" pattern="[0-9]{10}" required>
+<label>Contact Number</label>
+</div>
+
+<div class="input-group">
+<input type="text" name="fullname" required>
+<label>Full Name</label>
+</div>
+
+<!-- Password -->
+<div class="input-group password-box">
+<input type="password" id="password" name="password" required>
+<label>Password</label>
+<span class="toggle" onclick="togglePassword('password', this)">
+<i class="fa-solid fa-eye"></i>
+</span>
+</div>
+
+<div class="password-hint">
+Password must contain 8+ characters, 1 uppercase, 1 number & 1 symbol
+</div>
+
+<div class="strength-bar">
+<div id="strength-fill"></div>
+</div>
+
+<div id="strength-text"></div>
+
+<!-- Confirm Password -->
+<div class="input-group password-box">
+<input type="password" id="confirm_password" name="confirm_password" required>
+<label>Confirm Password</label>
+<span class="toggle" onclick="togglePassword('confirm_password', this)">
+<i class="fa-solid fa-eye"></i>
+</span>
+</div>
+
+<button type="submit">Sign Up</button>
+
+</form>
+
+<p>Already have an account?
+<a href="{{ url_for('login') }}">Login</a></p>
+
+<p id="errorMsg"></p>
+
+</div>
+
+<script>
+
+const password=document.getElementById("password");
+const strengthFill=document.getElementById("strength-fill");
+const strengthText=document.getElementById("strength-text");
+const confirmPass=document.getElementById("confirm_password");
+const errorMsg=document.getElementById("errorMsg");
+const form=document.querySelector("form");
+
+password.addEventListener("keyup",function(){
+
+let pass=password.value;
+let score=0;
+
+if(pass.length>=8) score++;
+if(/[A-Z]/.test(pass)) score++;
+if(/[0-9]/.test(pass)) score++;
+if(/[\W]/.test(pass)) score++;
+
+if(score==1){
+strengthFill.style.width="25%";
+strengthFill.style.background="red";
+strengthText.innerText="Weak Password";
+}
+else if(score==2){
+strengthFill.style.width="50%";
+strengthFill.style.background="orange";
+strengthText.innerText="Medium Password";
+}
+else if(score==3){
+strengthFill.style.width="75%";
+strengthFill.style.background="#4caf50";
+strengthText.innerText="Good Password";
+}
+else if(score==4){
+strengthFill.style.width="100%";
+strengthFill.style.background="green";
+strengthText.innerText="Strong Password";
+}
+
+});
+
+form.addEventListener("submit",function(e){
+
+const pass=password.value;
+const confirm=confirmPass.value;
+
+const pattern=/^(?=.*[A-Z])(?=.*[0-9])(?=.*[\W_]).{8,}$/;
+
+if(!pattern.test(pass)){
+e.preventDefault();
+errorMsg.textContent="Password must contain 8 characters, 1 capital letter, 1 number and 1 special character.";
+return;
+}
+
+if(pass!==confirm){
+e.preventDefault();
+errorMsg.textContent="Passwords do not match!";
+return;
+}
+
+errorMsg.textContent="";
+
+});
+
+function togglePassword(fieldId, element){
+
+const field = document.getElementById(fieldId);
+const icon = element.querySelector("i");
+
+if(field.type === "password"){
+field.type = "text";
+icon.classList.remove("fa-eye");
+icon.classList.add("fa-eye-slash");
+}else{
+field.type = "password";
+icon.classList.remove("fa-eye-slash");
+icon.classList.add("fa-eye");
+}
+
+}
+
+</script>
+
+</body>
+</html>

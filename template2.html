@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume Template 2</title>
+
+<style>
+body {
+  background: #f2f2f2;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 30px;
+}
+
+.resume {
+  background: white;
+  max-width: 800px;
+  margin: auto;
+  border-left: 8px solid #d4af37;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+h1 {
+  font-size: 32px;
+  color: #222;
+  margin-bottom: 5px;
+}
+
+h2 {
+  color: #d4af37;
+  border-bottom: 2px solid #d4af37;
+  padding-bottom: 5px;
+}
+
+p {
+  margin: 6px 0;
+  color: #444;
+}
+
+.skills span {
+  display: inline-block;
+  margin: 5px;
+  padding: 5px 12px;
+  background: #d4af37;
+  color: white;
+  border-radius: 20px;
+}
+
+button {
+  display: block;
+  margin: 15px auto;
+  padding: 12px 30px;
+  background: linear-gradient(90deg, #d4af37, #9c7c2c);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #9c7c2c, #d4af37);
+}
+</style>
+</head>
+
+<body>
+
+<div class="resume" id="resumeContent">
+
+  <h1 id="fullName">Full Name</h1>
+
+  <p><strong>Email:</strong> <span id="email"></span></p>
+  <p><strong>Phone:</strong> <span id="phone"></span></p>
+  <p><strong>Age:</strong> <span id="age"></span></p>
+
+  <h2>Education</h2>
+  <p><strong>10th:</strong> <span id="tenth"></span></p>
+  <p><strong>12th:</strong> <span id="twelfth"></span></p>
+  <p><strong>College:</strong> <span id="college"></span></p>
+  <p><strong>Degree:</strong> <span id="degree"></span></p>
+  <p><strong>Graduation Year:</strong> <span id="graduation"></span></p>
+
+  <h2>Skills</h2>
+  <div class="skills" id="skills"></div>
+
+  <h2>Experience</h2>
+  <p><strong>Years:</strong> <span id="experienceYears"></span></p>
+  <p id="summary"></p>
+
+  <h2>Other Details</h2>
+  <p><strong>Hobbies:</strong> <span id="hobbies"></span></p>
+  <p><strong>Languages:</strong> <span id="languages"></span></p>
+
+</div>
+
+<!-- BUTTONS -->
+<div style="text-align:center;">
+  <button id="downloadBtn">Download as PDF</button>
+  <button onclick="goBack()">Preview</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+const data = JSON.parse(localStorage.getItem('resumeData'));
+
+if (data) {
+  document.getElementById('fullName').textContent = data.fullName || '';
+  document.getElementById('email').textContent = data.email || '';
+  document.getElementById('phone').textContent = data.phone || '';
+  document.getElementById('age').textContent = data.age || '';
+
+  document.getElementById('tenth').textContent =
+    `${data.tenthSchool || ''} (${data.tenthYear || ''}) - ${data.tenthMarks || ''}`;
+
+  document.getElementById('twelfth').textContent =
+    `${data.twelfthSchool || ''} (${data.twelfthYear || ''}) - ${data.twelfthMarks || ''}`;
+
+  document.getElementById('college').textContent = data.college || '';
+  document.getElementById('degree').textContent = data.degree || '';
+  document.getElementById('graduation').textContent = data.graduation || '';
+
+  document.getElementById('experienceYears').textContent = data.experienceYears || '';
+  document.getElementById('summary').textContent = data.summary || '';
+
+  document.getElementById('hobbies').textContent = data.hobbies || "N/A";
+  document.getElementById('languages').textContent = data.languages || "N/A";
+
+  const skillsArr = data.skills ? data.skills.split(',') : [];
+  const skillsContainer = document.getElementById('skills');
+
+  skillsArr.forEach(skill => {
+    const span = document.createElement('span');
+    span.textContent = skill.trim();
+    skillsContainer.appendChild(span);
+  });
+}
+
+// PDF download
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  html2pdf().from(document.getElementById('resumeContent'))
+  .save(`${data?.fullName || "Resume"}_Template2.pdf`);
+});
+
+// UPDATED BACK BUTTON
+function goBack() {
+  localStorage.setItem('fromTemplates', "true");
+  window.location.href = "/info";
+}
+</script>
+
+</body>
+</html>

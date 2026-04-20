@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - ResumeGo</title>
+
+<style>
+
+body{
+margin:0;
+font-family:"Poppins",sans-serif;
+background:linear-gradient(135deg,#00b8a9,#f8b500);
+height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+nav{
+background-color:#222831;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 50px;
+color:white;
+}
+
+nav h1{
+font-size:24px;
+font-weight:600;
+}
+
+nav ul{
+list-style:none;
+display:flex;
+gap:25px;
+margin:0;
+padding:0;
+}
+
+nav ul li a{
+color:white;
+text-decoration:none;
+font-weight:500;
+transition:0.3s;
+}
+
+nav ul li a:hover{
+color:#f8b500;
+}
+
+.login-container{
+background:white;
+width:700px;
+margin:auto;
+margin-top:70px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+padding:40px;
+text-align:center;
+}
+
+.login-container h2{
+color:#00b8a9;
+margin-bottom:40px;
+}
+
+/* floating input */
+
+.input-group{
+position:relative;
+margin-bottom:20px;
+}
+
+.input-group input{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:14px;
+}
+
+.input-group label{
+position:absolute;
+left:12px;
+top:12px;
+background:white;
+padding:0 4px;
+color:#777;
+font-size:14px;
+transition:0.2s;
+pointer-events:none;
+}
+
+.input-group input:focus + label,
+.input-group input:valid + label{
+top:-8px;
+font-size:11px;
+color:#00b8a9;
+}
+
+/* password toggle */
+
+.password-box{
+position:relative;
+}
+
+.toggle{
+position:absolute;
+right:10px;
+top:12px;
+cursor:pointer;
+font-size:13px;
+color:#007bff;
+}
+
+/* button */
+
+.login-container button{
+width:100%;
+background-color:#f85f73;
+border:none;
+color:white;
+padding:12px;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+font-weight:600;
+}
+
+.login-container button:hover{
+background:#ff4757;
+transform:scale(1.03);
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.login-container p{
+font-size:14px;
+margin-top:15px;
+}
+
+.login-container a{
+color:#c807be;
+text-decoration:none;
+}
+
+.login-container a:hover{
+text-decoration:underline;
+}
+
+.error-message{
+color:red;
+font-size:13px;
+margin-top:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+<h1>ResumeGo</h1>
+<ul>
+<li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+<li><a href="{{ url_for('login') }}">Login</a></li>
+<li><a href="{{ url_for('info') }}">Home</a></li>
+</ul>
+</nav>
+
+<div class="login-container">
+
+<h2>Welcome Back to ResumeGo</h2>
+
+<form action="{{ url_for('login') }}" method="POST">
+
+<div class="input-group">
+<input type="email" id="email" name="email" required>
+<label>Email Address</label>
+</div>
+
+<div class="input-group password-box">
+<input type="password" id="password" name="password" required>
+<label>Password</label>
+<span class="toggle" onclick="togglePassword()">Show</span>
+</div>
+
+<button type="submit">Login</button>
+
+</form>
+
+<p>Don't have an account?
+<a href="{{ url_for('signup') }}">Sign Up</a></p>
+
+<p class="error-message" id="errorMsg"></p>
+
+</div>
+
+<script>
+
+function togglePassword(){
+
+const pass=document.getElementById("password");
+
+if(pass.type==="password"){
+pass.type="text";
+}
+else{
+pass.type="password";
+}
+
+}
+
+</script>
+
+</body>
+</html>
+

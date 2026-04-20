@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumeGo - Fill Your Information</title>
+
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, #f6d365, #fda085);
+
+  /* ✅ ONLY FIX */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 700px;
+  background: #fff;
+  border-radius: 15px;
+  padding: 30px 40px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+
+  /* small spacing */
+  margin: 20px;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.section {
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+}
+
+.personal { background: #ffecd2; }
+.education { background: #d0f0fd; }
+.skills { background: #d4f9d4; }
+.experience { background: #fde2e2; }
+
+input, textarea, select {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 2px solid #f0f0f0;
+  outline: none;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #ff7e5f;
+  box-shadow: 0 0 5px rgba(255,126,95,0.5);
+}
+
+textarea { resize: none; }
+
+.progress-bar-container {
+  width: 100%;
+  background-color: #eee;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 30px;
+  margin-bottom: 30px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  line-height: 30px;
+  font-weight: bold;
+  transition: width 0.3s ease-in-out;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #43cea2, #185a9d);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #185a9d, #43cea2);
+}
+</style>
+
+</head>
+<body>
+
+<div class="form-container">
+
+<h2>Fill Your Information</h2>
+
+<div class="progress-bar-container">
+<div class="progress-bar" id="progressBar">0%</div>
+</div>
+
+<form id="infoForm" autocomplete="off">
+
+<div class="section personal">
+<h3>Personal Info</h3>
+<input type="text" class="field-input" name="fullName" placeholder="Full Name" required>
+<input type="email" class="field-input" name="email" placeholder="Email" required>
+<input type="number" class="field-input" name="age" placeholder="Age (18+)" min="18" max="75" required>
+<input type="text" class="field-input" name="phone" placeholder="Phone Number" required>
+</div>
+
+<div class="section education">
+<h3>Education</h3>
+
+<h4>10th Details</h4>
+<input type="text" class="field-input" name="tenthSchool" placeholder="School Name" required>
+<input type="number" class="field-input" name="tenthYear" placeholder="Passing Year" min="1980" required>
+<input type="text" class="field-input" name="tenthMarks" placeholder="Percentage/Grade" required>
+
+<h4>12th Details</h4>
+<input type="text" class="field-input" name="twelfthSchool" placeholder="College Name" required>
+<input type="number" class="field-input" name="twelfthYear" placeholder="Passing Year" min="1980" required>
+<input type="text" class="field-input" name="twelfthMarks" placeholder="Percentage/Grade" required>
+
+<h4>Graduation Details</h4>
+<input type="text" class="field-input" name="college" placeholder="College/University" required>
+<input type="text" class="field-input" name="degree" placeholder="Degree" required>
+<input type="number" class="field-input" name="graduation" placeholder="Year of Graduation" min="1980" id="gradYear" required>
+</div>
+
+<div class="section skills">
+<h3>Skills</h3>
+<input type="text" class="field-input" name="skills" placeholder="Skills (comma separated)" required>
+</div>
+
+<div class="section experience">
+<h3>Experience</h3>
+<input type="number" class="field-input" name="experienceYears" placeholder="Years of Experience (0-40)" min="0" max="40" required>
+<textarea class="field-input" name="summary" placeholder="Summary / Objective" rows="4" required></textarea>
+</div>
+
+<div class="section" style="background:#e6ccff;">
+<h3>Other Details</h3>
+<input type="text" class="field-input" name="hobbies" placeholder="Hobbies">
+<input type="text" class="field-input" name="languages" placeholder="Known languages">
+</div>
+
+<button type="submit">Submit</button>
+
+</form>
+
+</div>
+
+<script>
+
+/* ✅ YOUR ORIGINAL JS (UNCHANGED) */
+
+const inputs = document.querySelectorAll('.field-input');
+const progressBar = document.getElementById('progressBar');
+
+function updateProgress(){
+let filled = 0;
+
+inputs.forEach(input=>{
+if(input.value.trim() !== ''){
+filled++;
+}
+});
+
+const percent = (filled / inputs.length) * 100;
+progressBar.style.width = percent + '%';
+progressBar.textContent = Math.round(percent) + '%';
+}
+
+inputs.forEach(input=>{
+input.addEventListener('input', updateProgress);
+});
+
+const currentYear = new Date().getFullYear();
+document.getElementById("gradYear").max = currentYear;
+
+window.onload = function () {
+
+  const data = JSON.parse(localStorage.getItem('resumeData'));
+  const fromTemplates = localStorage.getItem('fromTemplates');
+
+  if (data && fromTemplates === "true") {
+
+    document.querySelectorAll('.field-input').forEach(input => {
+      if (data[input.name]) {
+        input.value = data[input.name];
+      }
+    });
+
+    updateProgress();
+
+    localStorage.setItem('fromTemplates', "false");
+
+  } else {
+    localStorage.removeItem('resumeData');
+  }
+
+};
+
+document.getElementById('infoForm').addEventListener('submit', function(e){
+
+e.preventDefault();
+
+let formData = {};
+
+inputs.forEach(input=>{
+formData[input.name] = input.value.trim();
+});
+
+localStorage.setItem('resumeData', JSON.stringify(formData));
+
+window.location.href = "/templates";
+
+});
+
+</script>
+</body>
+</html>
+

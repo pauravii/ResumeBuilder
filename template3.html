@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume Template 3</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: #e0f7fa;
+}
+
+.resume {
+  display: flex;
+  max-width: 900px;
+  margin: 40px auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+.left {
+  width: 35%;
+  background: #00796b;
+  color: white;
+  padding: 40px 20px;
+}
+
+.right {
+  width: 65%;
+  padding: 40px;
+}
+
+h1 {
+  font-size: 26px;
+  margin-bottom: 15px;
+  color: white;
+}
+
+h2 {
+  color: #00796b;
+  border-bottom: 2px solid #00796b;
+  padding-bottom: 5px;
+}
+
+p, span {
+  font-size: 15px;
+}
+
+.skills span {
+  display: inline-block;
+  background: white;
+  color: #00796b;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+button {
+  display: block;
+  margin: 25px auto;
+  padding: 12px 30px;
+  border: none;
+  background: linear-gradient(90deg, #00796b, #26a69a);
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #26a69a, #00796b);
+}
+</style>
+</head>
+
+<body>
+
+<div class="resume" id="resumeContent">
+
+<div class="left">
+<h1 id="fullName">Full Name</h1>
+
+<p><strong>Email:</strong> <span id="email"></span></p>
+<p><strong>Phone:</strong> <span id="phone"></span></p>
+<p><strong>Age:</strong> <span id="age"></span></p>
+
+<h3>Other Details</h3>
+<p><strong>Hobbies:</strong> <span id="hobbies"></span></p>
+<p><strong>Languages:</strong> <span id="languages"></span></p>
+</div>
+
+<div class="right">
+
+<h2>Education</h2>
+
+<p><strong>10th:</strong> <span id="tenth"></span></p>
+<p><strong>12th:</strong> <span id="twelfth"></span></p>
+
+<p><strong>College:</strong> <span id="college"></span></p>
+<p><strong>Degree:</strong> <span id="degree"></span></p>
+<p><strong>Graduation:</strong> <span id="graduation"></span></p>
+
+<h2>Skills</h2>
+<div class="skills" id="skills"></div>
+
+<h2>Experience</h2>
+<p><strong>Years:</strong> <span id="experienceYears"></span></p>
+<p id="summary"></p>
+
+</div>
+
+</div>
+
+<button id="downloadBtn">Download as PDF</button>
+
+<div style="text-align:center;">
+<button onclick="goBack()">Preview</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+const data = JSON.parse(localStorage.getItem('resumeData'));
+
+if (data) {
+
+  document.getElementById('fullName').textContent = data.fullName || '';
+  document.getElementById('email').textContent = data.email || '';
+  document.getElementById('phone').textContent = data.phone || '';
+  document.getElementById('age').textContent = data.age || '';
+
+  document.getElementById('tenth').textContent =
+    `${data.tenthSchool || ''} (${data.tenthYear || ''}) - ${data.tenthMarks || ''}`;
+
+  document.getElementById('twelfth').textContent =
+    `${data.twelfthSchool || ''} (${data.twelfthYear || ''}) - ${data.twelfthMarks || ''}`;
+
+  document.getElementById('college').textContent = data.college || '';
+  document.getElementById('degree').textContent = data.degree || '';
+  document.getElementById('graduation').textContent = data.graduation || '';
+
+  document.getElementById('experienceYears').textContent = data.experienceYears || '';
+  document.getElementById('summary').textContent = data.summary || '';
+
+  document.getElementById('hobbies').textContent = data.hobbies || "N/A";
+  document.getElementById('languages').textContent = data.languages || "N/A";
+
+  const skillsArr = data.skills ? data.skills.split(',') : [];
+  const skillsContainer = document.getElementById('skills');
+
+  skillsArr.forEach(skill => {
+    const span = document.createElement('span');
+    span.textContent = skill.trim();
+    skillsContainer.appendChild(span);
+  });
+}
+
+// PDF
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  html2pdf().from(document.getElementById('resumeContent'))
+  .save(`${data?.fullName || "Resume"}_Template3.pdf`);
+});
+
+// ✅ FIXED BACK BUTTON
+function goBack() {
+  localStorage.setItem('fromTemplates', "true");
+  window.location.href = "/info";
+}
+</script>
+
+</body>
+</html>
